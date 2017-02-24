@@ -11,7 +11,7 @@ import UIKit
 class ImageViewController: UIViewController {
 
 
-    var icon = ""
+    private var icon = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,6 @@ class ImageViewController: UIViewController {
 
     @IBAction func touchIcon(_ sender: UIButton) {
         icon = sender.currentTitle!
-        print(icon)
         let setimage = parent as! AddOrEditTableViewController
         setimage.SetImage(icon)
 
