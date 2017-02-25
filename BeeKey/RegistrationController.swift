@@ -31,6 +31,8 @@ class RegistrationController: UIViewController, UITextFieldDelegate{
     let iv = "gqLOHUioQ0QjhuvI"
     
     private var users: Users!
+    private let animation = Animation()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +43,7 @@ class RegistrationController: UIViewController, UITextFieldDelegate{
         
         NotificationCenter.default.addObserver(self, selector: #selector(RegistrationController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(RegistrationController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        //расположение файла с бд
+
         print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
@@ -67,31 +69,13 @@ class RegistrationController: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func cancelAction(_ sender: UIBarButtonItem) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "HomeController")
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        
-        self.present(resultViewController, animated:false, completion:nil)
+        self.present(animation.animated_transitions(viewIndefiner: "HomeController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
     }
     
     @IBAction func registerNewUser(_ sender: UIButton) {
         if validateFields() {
             if (addNewUser()){
-                let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                
-                let resultViewController = storyBoard.instantiateViewController(withIdentifier: "signIn")
-                let transition = CATransition()
-                transition.duration = 0.5
-                transition.type = kCATransitionPush
-                transition.subtype = kCATransitionFromBottom
-                view.window!.layer.add(transition, forKey: kCATransition)
-                
-                self.present(resultViewController, animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "signIn", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromBottom, view: view), animated:false, completion:nil)
             }
         }
     }
@@ -117,16 +101,7 @@ class RegistrationController: UIViewController, UITextFieldDelegate{
         if let swipeGesture = gesture as? UISwipeGestureRecognizer{
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.right:
-                let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                
-                let resultViewController = storyBoard.instantiateViewController(withIdentifier: "HomeController")
-                let transition = CATransition()
-                transition.duration = 0.5
-                transition.type = kCATransitionPush
-                transition.subtype = kCATransitionFromLeft
-                view.window!.layer.add(transition, forKey: kCATransition)
-                
-                self.present(resultViewController, animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "HomeController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
             default:
                 break
             }
@@ -161,24 +136,8 @@ class RegistrationController: UIViewController, UITextFieldDelegate{
             let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive) { alert in
                 alertController.dismiss(animated: true, completion: nil)
             }
-            
-            let customPresentation = JellySlideInPresentation(dismissCurve: .linear,
-                                                              presentationCurve: .linear,
-                                                              cornerRadius: 15,
-                                                              backgroundStyle: .blur(effectStyle: .light),
-                                                              jellyness: .jellier,
-                                                              duration: .slow,
-                                                              directionShow: .top,
-                                                              directionDismiss: .bottom,
-                                                              widthForViewController: .fullscreen,
-                                                              heightForViewController: .fullscreen,
-                                                              horizontalAlignment: .center,
-                                                              verticalAlignment: .center,
-                                                              marginGuards: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10),
-                                                              corners: [.topLeft,.bottomRight])
-            let jellyAnimator = JellyAnimator(presentation: customPresentation)
-            jellyAnimator.prepare(viewController: alertController)
-            
+
+            animation.animate_alert(alert: alertController)
             alertController.addAction(alertAction)
             present(alertController, animated: true, completion: nil)
             

@@ -20,6 +20,7 @@ class informationTableViewController: UITableViewController {
     let key_encrypt = "bbC2H19lkVbQDfakxcrtNMQdd0FloLyw"
     let iv = "gqLOHUioQ0QjhuvI"
     
+    private let animation = Animation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +34,7 @@ class informationTableViewController: UITableViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
         self.view.addGestureRecognizer(swipeRight)
         
-        let backgroundImage = UIImage(named: "tableBackground")
-        let imageView = UIImageView(image: backgroundImage)
-        self.tableView.backgroundView = imageView
+        self.tableView.backgroundView = animation.backgroundImage()
         
         let realm = try! Realm()
         let key = realm.objects(Keys.self).filter("activity == true").first
@@ -58,47 +57,32 @@ class informationTableViewController: UITableViewController {
     }
     
     @IBAction func Cancel(_ sender: UIBarButtonItem) {
-        let realm = try! Realm()
-        let key = realm.objects(Keys.self).filter("activity == true").first
-        
-        try! realm.write {
-            key!.activity = false
-        }
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "TableLeyController")
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        
-        self.present(resultViewController, animated:false, completion:nil)
+        deactive()
+        self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
     }
     
     func swiped(_ gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer{
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.right:
-                let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                
-                let resultViewController = storyBoard.instantiateViewController(withIdentifier: "TableLeyController")
-                let transition = CATransition()
-                transition.duration = 0.5
-                transition.type = kCATransitionPush
-                transition.subtype = kCATransitionFromLeft
-                view.window!.layer.add(transition, forKey: kCATransition)
-                
-                self.present(resultViewController, animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
+                deactive()
             default:
                 break
             }
         }
     }
 
+   private func deactive(){
+        let realm = try! Realm()
+        let key = realm.objects(Keys.self).filter("activity == true").first
+        
+        try! realm.write {
+            key!.activity = false
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    
-
 }

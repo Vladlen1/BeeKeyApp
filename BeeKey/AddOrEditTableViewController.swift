@@ -21,15 +21,15 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
     
     private var keys: Keys!
     var icon = ""
-    let key_encrypt = "bbC2H19lkVbQDfakxcrtNMQdd0FloLyw" // length == 32
+    let key_encrypt = "bbC2H19lkVbQDfakxcrtNMQdd0FloLyw"
     let iv = "gqLOHUioQ0QjhuvI"
     
-//    static let delegate = AddOrEditTableViewController()
-
+    private let animation = Animation()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(AddOrEditTableViewController.swiped(_:)))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swiped(_:)))
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
         self.view.addGestureRecognizer(swipeRight)
         
@@ -37,10 +37,8 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let backgroundImage = UIImage(named: "tableBackground")
-        let imageView = UIImageView(image: backgroundImage)
-        self.tableView.backgroundView = imageView
+
+        self.tableView.backgroundView = animation.backgroundImage()
         
         let keys = try! Realm().objects(Keys.self)
         for key in keys{
@@ -85,31 +83,13 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
 
     @IBAction func Cancel(_ sender: UIBarButtonItem) {
         deactivate()
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "TableLeyController")
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        
-        self.present(resultViewController, animated:false, completion:nil)
+        self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
     }
     
     @IBAction func saveKey(_ sender: UIBarButtonItem) {
         if validateFields() {
             if (addNewKey()){
-                let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                
-                let resultViewController = storyBoard.instantiateViewController(withIdentifier: "TableLeyController")
-                let transition = CATransition()
-                transition.duration = 1
-                transition.type = kCATransitionPush
-                transition.subtype = kCATransitionMoveIn
-                view.window!.layer.add(transition, forKey: kCATransition)
-                
-                self.present(resultViewController, animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 1, type: kCATransitionPush, subtype: kCATransitionMoveIn, view: view), animated:false, completion:nil)
             }
         }
     }
@@ -118,16 +98,9 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
         if let swipeGesture = gesture as? UISwipeGestureRecognizer{
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.right:
-                let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                
-                let resultViewController = storyBoard.instantiateViewController(withIdentifier: "TableLeyController")
-                let transition = CATransition()
-                transition.duration = 0.5
-                transition.type = kCATransitionPush
-                transition.subtype = kCATransitionFromLeft
-                view.window!.layer.add(transition, forKey: kCATransition)
-                
-                self.present(resultViewController, animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
+                deactivate()
+
             default:
                 break
             }
@@ -179,23 +152,7 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
                 alertController.dismiss(animated: true, completion: nil)
             }
             
-            let customPresentation = JellySlideInPresentation(dismissCurve: .linear,
-                                                              presentationCurve: .linear,
-                                                              cornerRadius: 15,
-                                                              backgroundStyle: .blur(effectStyle: .light),
-                                                              jellyness: .jellier,
-                                                              duration: .slow,
-                                                              directionShow: .top,
-                                                              directionDismiss: .bottom,
-                                                              widthForViewController: .fullscreen,
-                                                              heightForViewController: .fullscreen,
-                                                              horizontalAlignment: .center,
-                                                              verticalAlignment: .center,
-                                                              marginGuards: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10),
-                                                              corners: [.topLeft,.bottomRight])
-            let jellyAnimator = JellyAnimator(presentation: customPresentation)
-            jellyAnimator.prepare(viewController: alertController)
-            
+            animation.animate_alert(alert: alertController)
             alertController.addAction(alertAction)
             present(alertController, animated: true, completion: nil)
             

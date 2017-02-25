@@ -15,6 +15,7 @@ class NavigationController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    private let animation = Animation()
     
     var search_key = try! Realm().objects(Keys.self)
     var searchActive : Bool = false
@@ -28,9 +29,7 @@ class NavigationController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let backgroundImage = UIImage(named: "tableBackground")
-        let imageView = UIImageView(image: backgroundImage)
-        self.tableView.backgroundView = imageView
+        self.tableView.backgroundView = animation.backgroundImage()
     }
     
     @IBAction func Exit(_ sender: UIBarButtonItem) {
@@ -40,12 +39,8 @@ class NavigationController: UIViewController, UITableViewDataSource, UITableView
         try! realm.write {
             user!.state = false
         }
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "HomeController")
-        resultViewController.modalPresentationStyle = .formSheet
-        resultViewController.modalTransitionStyle = .flipHorizontal
         
-        self.present(resultViewController, animated:true, completion:nil)
+        self.present(animation.animate_swipe(idefiner: "HomeController", presentationStyle: 2, transitionStyle: 1), animated:true, completion:nil)
     }
     
     @IBAction func tap_searchBar(_ sender: Any) {
@@ -126,23 +121,8 @@ class NavigationController: UIViewController, UITableViewDataSource, UITableView
                 UIApplication.shared.open(URL(string: keys[indexPath.row].site)!, options: [:], completionHandler: nil)
             }else{
                 let alertMessage = UIAlertController(title: "Safari", message: "Not a valid url", preferredStyle: .alert)
-                let customPresentation = JellySlideInPresentation(dismissCurve: .linear,
-                                                                  presentationCurve: .linear,
-                                                                  cornerRadius: 15,
-                                                                  backgroundStyle: .blur(effectStyle: .light),
-                                                                  jellyness: .jellier,
-                                                                  duration: .slow,
-                                                                  directionShow: .top,
-                                                                  directionDismiss: .bottom,
-                                                                  widthForViewController: .fullscreen,
-                                                                  heightForViewController: .fullscreen,
-                                                                  horizontalAlignment: .center,
-                                                                  verticalAlignment: .center,
-                                                                  marginGuards: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10),
-                                                                  corners: [.topLeft,.bottomRight])
-                let jellyAnimator = JellyAnimator(presentation: customPresentation)
-                jellyAnimator.prepare(viewController: alertMessage)
 
+                self.animation.animate_alert(alert: alertMessage)
                 alertMessage.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
                 self.present(alertMessage, animated: true, completion: nil)
             }

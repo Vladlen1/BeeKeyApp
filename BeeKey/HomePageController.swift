@@ -10,37 +10,18 @@ import UIKit
 
 class HomePageController: UIViewController {
     
+    private let animation = Animation()
+    
     @IBAction func signInPerform(_ sender: UIButton) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "signIn")
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        view.window!.layer.add(transition, forKey: kCATransition)
-        
-        self.present(resultViewController, animated:false, completion:nil)
+        self.present(animation.animated_transitions(viewIndefiner: "signIn", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromRight, view: view), animated:false, completion:nil)
     }
+    
     @IBAction func registration(_ sender: UIButton) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "registration")
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromTop
-        view.window!.layer.add(transition, forKey: kCATransition)
-        
-        self.present(resultViewController, animated:false, completion:nil)
+        self.present(animation.animated_transitions(viewIndefiner: "registration", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromTop, view: view), animated:false, completion:nil)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
 }

@@ -51,7 +51,6 @@
                                 </state>
                                 <connections>
                                     <action selector="registration:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rt6-DV-i0L"/>
-                                    <segue destination="QgD-qX-7c7" kind="show" id="bxz-AT-9op"/>
                                 </connections>
                             </button>
                         </subviews>
