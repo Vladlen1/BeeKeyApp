@@ -9,7 +9,6 @@
 import UIKit
 import RealmSwift
 import CryptoSwift
-import Jelly
 
 class RegistrationController: UIViewController, UITextFieldDelegate{
     

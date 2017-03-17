@@ -1,11 +1,11 @@
 /*************************************************************************
- * 
+ *
  * REALM CONFIDENTIAL
  * __________________
- * 
+ *
  *  [2011] - [2015] Realm Inc
  *  All Rights Reserved.
- * 
+ *
  * NOTICE:  All information contained herein is, and remains
  * the property of Realm Incorporated and its suppliers,
  * if any.  The intellectual and technical concepts contained
@@ -18,29 +18,23 @@
  *
  **************************************************************************/
 
-#ifndef REALM_SYNC_CRYPTO_HPP
-#define REALM_SYNC_CRYPTO_HPP
+#include <realm/sync/history.hpp>
 
-#include <memory>
-#include <stdexcept>
-
-#include <realm/binary_data.hpp>
-#include <realm/util/buffer.hpp>
+#ifndef REALM_SYNC_CHANGESET_COOKER_HPP
+#define REALM_SYNC_CHANGESET_COOKER_HPP
 
 namespace realm {
 namespace sync {
-namespace crypto {
 
-/// sha1() calculates the sha1 hash value of \param in_buffer of size \param
-/// in_buffer_size. The value is placed in \param out_buffer. The value has
-/// size 20, and the caller must ensure that \param out_buffer has size at
-/// least 20.
-/// sha1() throws an exception if the underlying openssl implementation
-/// fails, which should just happen in case of memory allocation failure.
-void sha1(const char* in_buffer, size_t in_buffer_size, char* out_buffer);
+/// Copy raw changesets unmodified.
+class TrivialChangesetCooker: public SyncHistory::ChangesetCooker {
+public:
+    bool cook_changeset(const Group&, const char* changeset,
+                        std::size_t changeset_size,
+                        util::AppendBuffer<char>&) override;
+};
 
-} // namespace crypto
 } // namespace sync
 } // namespace realm
 
-#endif // REALM_SYNC_CRYPTO_HPP
+#endif // REALM_SYNC_CHANGESET_COOKER_HPP

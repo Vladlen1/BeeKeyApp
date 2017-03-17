@@ -8,7 +8,6 @@
 
 import UIKit
 import RealmSwift
-import Jelly
 
 class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -98,7 +97,7 @@ class AddOrEditTableViewController: UITableViewController, UITextFieldDelegate, 
         if let swipeGesture = gesture as? UISwipeGestureRecognizer{
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.right:
-                self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.5, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
+                self.present(animation.animated_transitions(viewIndefiner: "TableLeyController", duration: 0.7, type: kCATransitionPush, subtype: kCATransitionFromLeft, view: view), animated:false, completion:nil)
                 deactivate()
 
             default:

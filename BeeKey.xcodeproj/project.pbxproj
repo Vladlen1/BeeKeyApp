@@ -157,6 +157,7 @@
 		8EAFBC2A1E2FE1B40016C380 /* BeeKey */ = {
 			isa = PBXGroup;
 			children = (
+				8EA580021E60A7FF0087231D /* Animate.swift */,
 				8EF770501E4124BE009E1EBE /* Controllers */,
 				8EF770511E4124CD009E1EBE /* Views */,
 				ED81E9AA1E327EA000F32710 /* Models */,
@@ -194,7 +195,6 @@
 				ED10105C1E375A99005375CF /* AddOrEditTableViewController.swift */,
 				8E2D4A911E5F4EDB004A9F00 /* ImageViewController.swift */,
 				EDB952A01E36BA7100777D33 /* CustomTableViewCell.swift */,
-				8EA580021E60A7FF0087231D /* Animate.swift */,
 				8EAFBC2B1E2FE1B40016C380 /* AppDelegate.swift */,
 			);
 			name = Controllers;

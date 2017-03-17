@@ -77,8 +77,6 @@ class NavigationController: UIViewController, UITableViewDataSource, UITableView
             cell.keyImageView?.image = UIImage(named: keys[indexPath.row].image)
             cell.keyNameLabel?.text = keys[indexPath.row].key_name
             cell.loginLabel?.text = keys[indexPath.row].login
-            cell.keyImageView.layer.cornerRadius = 30.0
-            cell.keyImageView.clipsToBounds = true
         }
         
         cell.keyImageView?.layer.cornerRadius = 30.0
